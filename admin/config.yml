@@ -1,45 +1,4 @@
 backend:
   name: github
-  repo: chn97al-prog/gradengineer1 # اسم حسابك ومستودعك على غيت هاب
+  repo: chn97al-prog/gradengineer1
   branch: main
-
-media_folder: "images"
-public_folder: "/images"
-
-collections:
-  - name: "site_management"
-    label: "إدارة الموقع الكاملة"
-    delete: false
-    files:
-      - file: "data/content.json"
-        label: "التحكم بالموديلات، الخانات، والتصميم"
-        name: "content"
-        fields:
-          - { label: "اسم الموقع في المتصفح", name: "site_title", widget: "string" }
-          - { label: "العنوان الرئيسي للموقع (H1)", name: "main_heading", widget: "string" }
-          
-          - label: "إعدادات الألوان والتصميم"
-            name: "design"
-            widget: "object"
-            fields:
-              - { label: "اللون الأساسي للموقع", name: "primary_color", widget: "color" }
-              - { label: "اللون الثانوي (الأزرار والزخارف)", name: "secondary_color", widget: "color" }
-              - { label: "لون خلفية الموقع", name: "bg_color", widget: "color" }
-
-          - label: "قائمة الموديلات (إضافة / حذف / تعديل)"
-            name: "models"
-            widget: "list"
-            summary: '{{fields.name}} - السعر: {{fields.price}}'
-            fields:
-              - { label: "معرف الموديل (بالإنجليزي مثل: royal)", name: "id", widget: "string" }
-              - { label: "اسم الموديل (بالعربي)", name: "name", widget: "string" }
-              - { label: "سعر الموديل", name: "price", widget: "number", value_type: "int" }
-
-          - label: "أنواع الأوشحة (إضافة / حذف / تعديل)"
-            name: "sash_types"
-            widget: "list"
-            summary: '{{fields.name}} - السعر الإضافي: {{fields.price}}'
-            fields:
-              - { label: "معرف الوشاح (بالإنجليزي مثل: classic_sash)", name: "id", widget: "string" }
-              - { label: "اسم الوشاح بالعربي", name: "name", widget: "string" }
-              - { label: "السعر الإضافي للوشاح", name: "price", widget: "number", value_type: "int" }
