@@ -573,14 +573,12 @@
   <div>جميع الحقوق محفوظة © <span id="year"></span></div>
 </footer>
 
-<script>
 document.getElementById('year').textContent = new Date().getFullYear();
 
 /* ============================================================
    إعدادات الإرسال — عبّي هاي القيم قبل النشر
    ============================================================ */
 const CONFIG = {
-  // بيانات تليكرام صارت مخفية بالكامل عبر Netlify Function — مو هنا
   TELEGRAM_FUNCTION_URL: "/.netlify/functions/send-telegram",
   GOOGLE_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbyCf6R8uL6ffy4iupYpATMCPpGGYjfYPwH0Obazucv3wXowwkz9bM8VFl3NHDgCWXm7/exec"
 };
@@ -595,66 +593,50 @@ const dynamicFields = document.getElementById('dynamicFields');
 const sashTypeWrap = document.getElementById('sashTypeWrap');
 const sashOptions = document.querySelectorAll('.sash-opt');
 
-/* مواصفات الطلب — موديلات بدون وشاح فرعي */
-const MEASUREMENTS = [
-  {id:"fHeight",  label:"الطول (سم)",       placeholder:"مثال: 175"},
-  {id:"fShoulder",label:"الكتف (سم)",        placeholder:"مثال: 44"},
-  {id:"fChest",   label:"محيط الصدر (سم)",   placeholder:"مثال: 98"},
-  {id:"fSleeve",  label:"الردن (سم)",         placeholder:"مثال: 62"},
-  {id:"fHead",    label:"الرأس (سم)",         placeholder:"مثال: 57"},
-];
+// مصفوفات فارغة سيتم تعبئتها من لوحة التحكم (ملف data/content.json)
+let MEASUREMENTS = [];
+let MODEL_FIELDS = {};
+let AMERICAN_SASH_FIELDS = {};
 
-const MODEL_FIELDS = {
-  "عادي": [
-    {id:"fFullName", label:"الاسم الثلاثي", placeholder:"مثال: محمد علي حسن"},
-    {id:"fSashName", label:"الاسم على الوشاح"},
-    {id:"fCapText", label:"الكتابة على القبعة", hasImage:true},
-    {id:"fCapSide", label:"الكتابة على جانب القبعة", hasImage:true},
-    {type:"divider", label:"📏 القياسات"},
-    ...MEASUREMENTS
-  ],
-  "ملكي": [
-    {id:"fFullName", label:"الاسم الثلاثي", placeholder:"مثال: محمد علي حسن"},
-    {id:"fSashName", label:"الاسم على الوشاح"},
-    {id:"fBackText", label:"الكتابة على الظهر", hasImage:true},
-    {id:"fCapText", label:"الكتابة على القبعة", hasImage:true},
-    {id:"fCapSide", label:"الكتابة على جانب القبعة", hasImage:true},
-    {type:"divider", label:"📏 القياسات"},
-    ...MEASUREMENTS
-  ]
-};
+/* جلب الخانات والموديلات ديناميكياً من لوحة التحكم */
+async function loadDynamicAdminConfig() {
+  try {
+    const res = await fetch('/data/content.json');
+    if (!res.ok) throw new Error("لم يتم العثور على ملف التحكم");
+    const data = await res.json();
 
-/* مواصفات موديل الأمريكي — حسب نوع الوشاح المختار */
-const AMERICAN_SASH_FIELDS = {
-  "عادي": [
-    {id:"fFullName", label:"الاسم الثلاثي", placeholder:"مثال: محمد علي حسن"},
-    {id:"fSashName", label:"الاسم على الوشاح"},
-    {id:"fCapText", label:"الكتابة على القبعة", hasImage:true},
-    {id:"fCapSide", label:"الكتابة على جانب القبعة", hasImage:true},
-    {type:"divider", label:"📏 القياسات"},
-    ...MEASUREMENTS
-  ],
-  "مائل": [
-    {id:"fFullName", label:"الاسم الثلاثي", placeholder:"مثال: محمد علي حسن"},
-    {id:"fSashName", label:"الاسم على الوشاح"},
-    {id:"fCapText", label:"الكتابة على القبعة", hasImage:true},
-    {id:"fCapSide", label:"الكتابة على جانب القبعة", hasImage:true},
-    {type:"divider", label:"📏 القياسات"},
-    ...MEASUREMENTS
-  ],
-  "ملكي": [
-    {id:"fFullName", label:"الاسم الثلاثي", placeholder:"مثال: محمد علي حسن"},
-    {id:"fSashName", label:"الاسم على الوشاح"},
-    {id:"fBackText", label:"الكتابة على الظهر", hasImage:true},
-    {id:"fCapText", label:"الكتابة على القبعة", hasImage:true},
-    {id:"fCapSide", label:"الكتابة على جانب القبعة", hasImage:true},
-    {type:"divider", label:"📏 القياسات"},
-    ...MEASUREMENTS
-  ]
-};
+    // تعبئة البيانات الآتية من لوحة التحكم
+    MEASUREMENTS = data.measurements || [];
+    MODEL_FIELDS = data.model_fields || {};
+    AMERICAN_SASH_FIELDS = data.american_sash_fields || {};
+
+    // إذا قمت بإضافة ميزة تعديل الألوان من اللوحة، سيتم تطبيقها هنا تلقائياً
+    if (data.design) {
+      if (data.design.primary_color) document.documentElement.style.setProperty('--primary-color', data.design.primary_color);
+      if (data.design.secondary_color) document.documentElement.style.setProperty('--secondary-color', data.design.secondary_color);
+      if (data.design.bg_color) document.body.style.backgroundColor = data.design.bg_color;
+    }
+    
+    console.log("تم مزامنة لوحة التحكم بنجاح!");
+  } catch (error) {
+    console.error("خطأ في جلب بيانات لوحة التحكم، جاري استخدام الإعدادات الاحتياطية:", error);
+    // إعدادات احتياطية في حال اختفاء ملف اللوحة لضمان عدم توقف الموقع
+    MEASUREMENTS = [
+      {id:"fHeight", label:"الطول (سم)", placeholder:"مثال: 175"},
+      {id:"fShoulder",label:"الكتف (سم)", placeholder:"مثال: 44"},
+      {id:"fChest", label:"محيط الصدر (سم)", placeholder:"مثال: 98"},
+      {id:"fSleeve", label:"الردن (سم)", placeholder:"مثال: 62"},
+      {id:"fHead", label:"الرأس (سم)", placeholder:"مثال: 57"}
+    ];
+    MODEL_FIELDS = {
+      "عادي": [{id:"fFullName", label:"الاسم الثلاثي"}, {id:"fSashName", label:"الاسم على الوشاح"}, {type:"divider", label:"📏 القياسات"}, ...MEASUREMENTS],
+      "ملكي": [{id:"fFullName", label:"الاسم الثلاثي"}, {id:"fSashName", label:"الاسم على الوشاح"}, {id:"fBackText", label:"الكتابة على الظهر", hasImage:true}, {type:"divider", label:"📏 القياسات"}, ...MEASUREMENTS]
+    };
+  }
+}
 
 function currentFieldSet(){
-  if(selectedModel === "أمريكي"){
+  if(selectedModel === "أمريكي" || selectedModel === "امريكي"){
     return selectedSash ? AMERICAN_SASH_FIELDS[selectedSash] : null;
   }
   return MODEL_FIELDS[selectedModel] || null;
@@ -667,7 +649,7 @@ function renderFields(){
   let inMeasure = false;
   fields.forEach(function(f){
     if(f.type === 'divider'){
-      if(inMeasure) html += '</div>'; // close previous grid
+      if(inMeasure) html += '</div>'; 
       html += '<div class="field-divider">' + f.label + '</div>';
       html += '<div class="measure-grid">';
       inMeasure = true;
@@ -687,8 +669,6 @@ function renderFields(){
   dynamicFields.innerHTML = html;
 }
 
-
-
 sashOptions.forEach(btn=>{
   btn.addEventListener('click', ()=>{
     sashOptions.forEach(b=>b.classList.remove('active'));
@@ -707,7 +687,7 @@ cards.forEach(card=>{
     selectedSash = null;
     sashOptions.forEach(b=>b.classList.remove('active'));
 
-    if(selectedModel === "أمريكي"){
+    if(selectedModel === "أمريكي" || selectedModel === "امريكي"){
       sashTypeWrap.style.display = "block";
       dynamicFields.innerHTML = "";
     }else{
@@ -722,6 +702,9 @@ cards.forEach(card=>{
     }, 200);
   });
 });
+
+// تشغيل جلب بيانات لوحة التحكم فور تحميل الصفحة
+document.addEventListener('DOMContentLoaded', loadDynamicAdminConfig);
 
 /* ---------- ظهور الكروت عند الوصول للقسم ---------- */
 const io = new IntersectionObserver((entries)=>{
