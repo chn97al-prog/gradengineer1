@@ -1,0 +1,47 @@
+backend:
+  name: git-gateway
+  branch: main # اسم فرع الجيت هاب الخاص بك
+
+media_folder: "images" # مجلد حفظ الصور المرفوعة
+public_folder: "/images"
+
+collections:
+  - name: "site_settings"
+    label: "إدارة الموقع بالكامل"
+    delete: false
+    files:
+      - file: "data/content.json"
+        label: "البيانات والموديلات والتصميم"
+        name: "content"
+        fields:
+          # قسم التحكم في النصوص الرئيسية
+          - { label: "عنوان الموقع الرئيسي", name: "site_title", widget: "string" }
+          - { label: "نص الترحيب العلوي", name: "welcome_message", widget: "string" }
+          
+          # قسم التحكم بالتصميم والألوان
+          - label: "إعدادات ألوان وتصميم الموقع"
+            name: "design"
+            widget: "object"
+            fields:
+              - { label: "اللون الرئيسي للموقع (Hex)", name: "primary_color", widget: "color", default: "#1a1a1a" }
+              - { label: "اللون الثانوي وأزرار التحكم", name: "secondary_color", widget: "color", default: "#gold" }
+              - { label: "لون خلفية الموقع", name: "bg_color", widget: "color", default: "#ffffff" }
+
+          # قسم إضافة وحذف الموديلات بحرية
+          - label: "قائمة الموديلات (إضافة / مسح / تعديل)"
+            name: "models"
+            widget: "list"
+            summary: '{{fields.name}} - {{fields.price}}'
+            fields:
+              - { label: "اسم الموديل", name: "name", widget: "string" }
+              - { label: "سعر الموديل", name: "price", widget: "number", value_type: "int" }
+              - { label: "صورة الموديل", name: "image", widget: "image", required: false }
+
+          # قسم إضافة وحذف الخانات والأوشحة بحرية
+          - label: "أنواع الأوشحة والخانات الإضافية"
+            name: "sash_types"
+            widget: "list"
+            summary: '{{fields.name}}'
+            fields:
+              - { label: "نوع الوشاح / الخانة", name: "name", widget: "string" }
+              - { label: "السعر الإضافي", name: "price", widget: "number", value_type: "int" }

@@ -1,0 +1,60 @@
+{
+  "design": {
+    "primary_color": "#b89742",
+    "secondary_color": "#111111",
+    "bg_color": "#fafafa"
+  },
+  "measurements": [
+    {"id":"fHeight", "label":"الطول (سم)", "placeholder":"مثال: 175"},
+    {"id":"fShoulder","label":"الكتف (سم)", "placeholder":"مثال: 44"},
+    {"id":"fChest", "label":"محيط الصدر (سم)", "placeholder":"مثال: 98"},
+    {"id":"fSleeve", "label":"الردن (سم)", "placeholder":"مثال: 62"},
+    {"id":"fHead", "label":"الرأس (سم)", "placeholder":"مثال: 57"}
+  ],
+  "model_fields": {
+    "عادي": [
+      {"id":"fFullName", "label":"الاسم الثلاثي", "placeholder":"مثال: محمد علي حسن"},
+      {"id":"fSashName", "label":"الاسم على الوشاح"},
+      {"id":"fCapText", "label":"الكتابة على القبعة", "hasImage":true},
+      {"id":"fCapSide", "label":"الكتابة على جانب القبعة", "hasImage":true},
+      {"type":"divider", "label":"📏 القياسات"},
+      {"id":"fHeight", "label":"الطول (سم)"},
+      {"id":"fShoulder","label":"الكتف (سم)"},
+      {"id":"fChest", "label":"محيط الصدر (سم)"},
+      {"id":"fSleeve", "label":"الردن (سم)"},
+      {"id":"fHead", "label":"الرأس (سم)"}
+    ],
+    "ملكي": [
+      {"id":"fFullName", "label":"الاسم الثلاثي", "placeholder":"مثال: محمد علي حسن"},
+      {"id":"fSashName", "label":"الاسم على الوشاح"},
+      {"id":"fBackText", "label":"الكتابة على الظهر", "hasImage":true},
+      {"id":"fCapText", "label":"الكتابة على القبعة", "hasImage":true},
+      {"id":"fCapSide", "label":"الكتابة على جانب القبعة", "hasImage":true},
+      {"type":"divider", "label":"📏 القياسات"},
+      {"id":"fHeight", "label":"الطول (سم)"},
+      {"id":"fShoulder","label":"الكتف (سم)"},
+      {"id":"fChest", "label":"محيط الصدر (سم)"},
+      {"id":"fSleeve", "label":"الردن (سم)"},
+      {"id":"fHead", "label":"الرأس (سم)"}
+    ]
+  },
+  "american_sash_fields": {
+    "عادي": [
+      {"id":"fFullName", "label":"الاسم الثلاثي"},
+      {"id":"fSashName", "label":"الاسم على الوشاح"},
+      {"type":"divider", "label":"📏 القياسات"},
+      {"id":"fHeight", "label":"الطول (سم)"},
+      {"id":"fShoulder","label":"الكتف (سم)"}
+    ],
+    "مائل": [
+      {"id":"fFullName", "label":"الاسم الثلاثي"},
+      {"id":"fSashName", "label":"الاسم على الوشاح"},
+      {"type":"divider", "label":"📏 القياسات"}
+    ],
+    "ملكي": [
+      {"id":"fFullName", "label":"الاسم الثلاثي"},
+      {"id":"fBackText", "label":"الكتابة على الظهر", "hasImage":true},
+      {"type":"divider", "label":"📏 القياسات"}
+    ]
+  }
+}
