@@ -1,4 +1,17 @@
 backend:
-  name: github
-  repo: chn97al-prog/gradengineer1
-  branch: main
+  name: local-git
+
+media_folder: "images"
+public_folder: "/images"
+
+collections:
+  - name: "site_management"
+    label: "إدارة الموقع الكاملة"
+    delete: false
+    files:
+      - file: "data/content.json"
+        label: "التحكم بالموديلات، الخانات، والتصميم"
+        name: "content"
+        fields:
+          - { label: "اسم الموقع في المتصفح", name: "site_title", widget: "string" }
+          - { label: "العنوان الرئيسي للموقع (H1)", name: "main_heading", widget: "string" }
